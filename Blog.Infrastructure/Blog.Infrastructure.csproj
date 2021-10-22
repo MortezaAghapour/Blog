@@ -12,15 +12,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Pluralize.NET.Core" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FluentApiConfigurations\" />
     <Folder Include="UnitOfWorks\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Blog.Application\Blog.Application.csproj" />
     <ProjectReference Include="..\Blog.Domain\Blog.Domain.csproj" />
     <ProjectReference Include="..\Blog.Shared\Blog.Shared.csproj" />
   </ItemGroup>
