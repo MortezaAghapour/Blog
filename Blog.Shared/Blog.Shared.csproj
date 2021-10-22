@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-    <Folder Include="Dtos\" />
-    <Folder Include="FluentValidations\" />
-    <Folder Include="Queries\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>
