@@ -4,12 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Blog.Domain.Entities.Base;
 using Blog.Shared.Markers.Entities;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Blog.Domain.Contracts.Repositories.Base
 {
-    public interface IRepository<T> where T : class,IEntity
+    public interface IRepository<T> where T : Entity
     {
         #region Get
         Task<T> Get(Expression<Func<T, bool>> expression = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
@@ -37,7 +38,6 @@ namespace Blog.Domain.Contracts.Repositories.Base
         void Delete(T entity);
         void Delete(List<T> entities);
         Task DeleteWithIncludes(object id, CancellationToken cancellationToken = default);
-        void DeleteWithIncludes(T entity);
 
         #endregion
     }

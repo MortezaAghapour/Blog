@@ -107,13 +107,7 @@ namespace Blog.Infrastructure.Extensions.DbContexts
             var userIp = webHelper.GetIpAddress();
             var now = DateTime.UtcNow;
             var currentUser = workContext.CurrentUser;
-            var userInfo = new AuditUserInfo
-            {
-                IpAddress = userIp,
-                UserAgent = userAgent,
-                UserId = currentUser.Id,
-                UserName = currentUser.UserName
-            };
+
 
 
             var modifiedEntries = changeTracker.Entries<IAuditable>()
@@ -121,7 +115,11 @@ namespace Blog.Infrastructure.Extensions.DbContexts
             foreach (var modifiedEntry in modifiedEntries)
             {
                 modifiedEntry.Property(AuditConsts.ModifyDate).CurrentValue = now;
-                modifiedEntry.Property(AuditConsts.UserInfo).CurrentValue = userInfo;
+                modifiedEntry.Property(AuditConsts.IpAddress).CurrentValue = userIp;
+                modifiedEntry.Property(AuditConsts.UserAgent).CurrentValue = userAgent;
+                modifiedEntry.Property(AuditConsts.UserId).CurrentValue = currentUser.Id;
+                modifiedEntry.Property(AuditConsts.UserName).CurrentValue = currentUser.UserName;
+                
             }
 
             var addedEntries = changeTracker.Entries<IAuditable>()
@@ -129,14 +127,22 @@ namespace Blog.Infrastructure.Extensions.DbContexts
             foreach (var addedEntry in addedEntries)
             {
                 addedEntry.Property(AuditConsts.CreateDate).CurrentValue = now;
-                addedEntry.Property(AuditConsts.UserInfo).CurrentValue = userInfo;
+
+                addedEntry.Property(AuditConsts.IpAddress).CurrentValue = userIp;
+                addedEntry.Property(AuditConsts.UserAgent).CurrentValue = userAgent;
+                addedEntry.Property(AuditConsts.UserId).CurrentValue = currentUser.Id;
+                addedEntry.Property(AuditConsts.UserName).CurrentValue = currentUser.UserName;
             }
             var deletedEntries = changeTracker.Entries<IAuditable>()
                 .Where(x => x.State == EntityState.Added);
             foreach (var deletedEntry in deletedEntries)
             {
                 deletedEntry.Property(AuditConsts.DeleteDate).CurrentValue = now;
-                deletedEntry.Property(AuditConsts.UserInfo).CurrentValue = userInfo;
+
+                deletedEntry.Property(AuditConsts.IpAddress).CurrentValue = userIp;
+                deletedEntry.Property(AuditConsts.UserAgent).CurrentValue = userAgent;
+                deletedEntry.Property(AuditConsts.UserId).CurrentValue = currentUser.Id;
+                deletedEntry.Property(AuditConsts.UserName).CurrentValue = currentUser.UserName;
             }
         }
         #endregion

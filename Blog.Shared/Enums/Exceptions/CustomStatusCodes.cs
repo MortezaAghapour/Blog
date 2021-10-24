@@ -21,7 +21,8 @@ namespace Blog.Shared.Enums.Exceptions
         [Display(Name = "پارامتر ورودی خالی می باشد")]
         ArgumentNull,
         [Display(Name = "خطایی نامعلوم رخ داده است")]
-        UnKnown
-
+        UnKnown,
+        [Display(Name = "آبجکت مورد نظر خالی می باشد")]
+        NullReference
     }
 }
