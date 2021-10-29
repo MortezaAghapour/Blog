@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Blog.Application.Dtos.AppSettings.Cors;
 using Blog.Application.Dtos.AppSettings.Identity;
+using Blog.Application.Dtos.AppSettings.Jwt;
 using Blog.Application.Dtos.Base;
 using Blog.Domain.Contracts.Repositories.Base;
 using Blog.Domain.Contracts.UnitOfWorks;
@@ -20,6 +21,7 @@ using Blog.Infrastructure.Repositories.Base;
 using Blog.Infrastructure.UnitOfWorks;
 using Blog.Shared.Enums.Exceptions;
 using Blog.Shared.Exceptions;
+using Blog.Shared.Extensions.Identity;
 using Blog.Shared.Helpers;
 using Blog.Shared.Markers.Configurations;
 using Blog.Shared.Markers.DependencyInjectionLifeTimes;
@@ -133,6 +135,7 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
         public static void AddAppSettingConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureStartupConfig<IdentityConfiguration>(configuration.GetSection(nameof(IdentityConfiguration)));
+            services.ConfigureStartupConfig<JwtConfiguration>(configuration.GetSection(nameof(JwtConfiguration)));
             
         }
         #endregion
@@ -229,11 +232,101 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
 
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
+            var jwtConfiguration = configuration.GetSection(nameof(JwtConfiguration)).Get<JwtConfiguration>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                var secretKey = Encoding.UTF8.GetBytes(jwtConfiguration.SecreteKey);
+                var encryptionKey = Encoding.UTF8.GetBytes(jwtConfiguration.EncryptKey);
+
+                var validationParameters = new TokenValidationParameters
+                {
+                    ClockSkew = TimeSpan.Zero, // default: 5 min
+                    RequireSignedTokens = true,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+
+                    RequireExpirationTime = true,
+                    ValidateLifetime = true,
+
+                    ValidateAudience = true, //default : false
+                    ValidAudience = jwtConfiguration.Audience,
+
+                    ValidateIssuer = true, //default : false
+                    ValidIssuer = jwtConfiguration.Issuer,
+
+                    TokenDecryptionKey = new SymmetricSecurityKey(encryptionKey)
+                };
+
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = validationParameters;
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception != null && context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                            throw new AppException(CustomStatusCodes.UnAuthorized, "Token Expired", HttpStatusCode.Unauthorized, context.Exception, null);
+                        }
+
+                        if (context.Exception != null)
+                            throw new AppException(CustomStatusCodes.UnAuthorized, "Authentication failed.", HttpStatusCode.Unauthorized, context.Exception, null);
+
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = async context =>
+                    {
+                        var signInManager = context.HttpContext.RequestServices.GetRequiredService<SignInManager<AppUser>>();
+                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+
+                        var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                        if (claimsIdentity?.Claims?.Any() != true)
+                            context.Fail("This token has no claims.");
+
+                        var securityStamp = claimsIdentity.FindFirstValue(new ClaimsIdentityOptions().SecurityStampClaimType);
+                        if (!securityStamp.HasValue())
+                            context.Fail("This token has no security stamp");
+
+                        //Find user and token from database and perform your custom validation
+                        var userId = claimsIdentity.GetUserId<int>();
+                        var user = await userService.GetUserById(userId);
+
+                        if (!user.SecurityStamp.Equals(securityStamp))
+                            context.Fail("Token security stamp is not valid.");
+
+                        var validatedUser = await signInManager.ValidateSecurityStampAsync(context.Principal);
+                        if (validatedUser == null)
+                            context.Fail("Token security stamp is not valid.");
+
+                        if (user.LockoutEnabled)
+                            context.Fail("User is Lockout");
+
+                    },
+                    OnChallenge = context =>
+                    {
+                        //var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
+                        //logger.LogError("OnChallenge error", context.Error, context.ErrorDescription);
+
+                        if (context.AuthenticateFailure != null)
+                        {
+                            context.Response.Headers.Add("Require-Login", "true");
+
+                            throw new AppException(CustomStatusCodes.UnAuthorized, "Authenticate failure.", HttpStatusCode.Unauthorized, context.AuthenticateFailure, null);
+
+                        }
+                        context.Response.Headers.Add("No-Access", "true");
+                        // throw new AppException(CustomStatusCodes.UnAuthorized, "You are unauthorized to access this resource.", HttpStatusCode.Unauthorized);
+                        throw new UnauthorizedAccessException("require login");
+                        //return Task.CompletedTask;
+                    }
+                };
             });
         }
 

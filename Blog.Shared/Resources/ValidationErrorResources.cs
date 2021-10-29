@@ -16,5 +16,8 @@ namespace Blog.Shared.Resources
 
         public static string CategoryDeleteIdRequired => "شناسه دسته بندی برای حذف نمی تواند خالی باشد";
         public static string CategoryIdNotLessThanZero => "شناسه دسته بندی نمی تواند کوچکتر یا مساوی صفر باشد";
+        public static string UserNameIsRequired => "وارد کردن نام کاربری اجباری می باشد";
+        public static string PasswordIsRequired => "وارد کردن رمز عبور اجباری می باشد";
+        public static string UserNameIsExist => "نام کاربری وارد شده تکراری می باشد";
     }
 }
