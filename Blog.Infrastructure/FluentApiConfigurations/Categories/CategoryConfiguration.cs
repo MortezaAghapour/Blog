@@ -8,6 +8,7 @@ namespace Blog.Infrastructure.FluentApiConfigurations.Categories
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
+            builder.HasKey(c => c.Id);
             builder.Property(c => c.Name).HasMaxLength(250).IsRequired();
             builder.Property(c => c.Description).HasMaxLength(500);
             builder.Property(c => c.Icon).HasMaxLength(250);

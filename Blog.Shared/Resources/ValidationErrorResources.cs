@@ -19,5 +19,8 @@ namespace Blog.Shared.Resources
         public static string UserNameIsRequired => "وارد کردن نام کاربری اجباری می باشد";
         public static string PasswordIsRequired => "وارد کردن رمز عبور اجباری می باشد";
         public static string UserNameIsExist => "نام کاربری وارد شده تکراری می باشد";
+        public static string UserNotFoundWithEnteredInfo => "کاربری با مشخصات وارد شده یافت نشد";
+        public static string UserIsLockOut => "کاربر مورد نظر مسدود می باشد";
+        public static string UserNotAllowed => "کاربر مورد نظر اجازه ورود به سیستم را ندارد";
     }
 }

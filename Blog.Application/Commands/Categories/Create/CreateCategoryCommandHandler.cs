@@ -26,7 +26,10 @@ namespace Blog.Application.Commands.Categories.Create
         #region Methods
         public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var category = request.Adapt<Category>();
+            
+           
+             var category = request.Adapt<Category>();
+             category.ParentId = category.ParentId == 0 ? null : category.ParentId;
             await _categoryRepository.Insert(category, cancellationToken);
             await _unitOfWork.SaveChangeAsync(cancellationToken);
             return category.Adapt<CategoryDto>();

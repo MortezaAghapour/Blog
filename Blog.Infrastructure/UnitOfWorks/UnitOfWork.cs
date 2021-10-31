@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Blog.Infrastructure.UnitOfWorks
 {
-    public class UnitOfWork : IUnitOfWork ,ISingletonLifeTime
+    public class UnitOfWork : IUnitOfWork ,IScopedLifeTime
     {
         #region Fields
 

@@ -123,20 +123,21 @@ namespace Blog.Infrastructure.Repositories.Base
             return await query.Select(selector).ToListAsync(cancellationToken);
         }
 
-        public async Task<T> GetById(object id, CancellationToken cancellationToken = default)
+        public async Task<T> GetById(long id, CancellationToken cancellationToken = default)
         {
-            if (id is null)
+            if (id <=0)
             {
-                throw new NotFoundException($"the {nameof(id)} not found in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
+                throw new NotFoundException($"the {nameof(id)} not less than equal zero in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
             }
-            return await Entities.FindAsync(id, cancellationToken);
+            // return await Entities.FindAsync(new object[]{ id }, cancellationToken);
+            return await Entities.FindAsync(new object[]{id},cancellationToken);
         }
 
-        public async Task<T> GetWithIncludes(object id, CancellationToken cancellationToken = default) 
+        public async Task<T> GetWithIncludes(long id, CancellationToken cancellationToken = default) 
         {
-            if (id is null)
+            if (id <=0)
             {
-                throw new NotFoundException($"the {nameof(id)} not found in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
+                throw new NotFoundException($"the {nameof(id)} not less than equal zero in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
             }
             var includes = _blogDbContext.Model.GetIncludePaths(typeof(T));
             var query = Entities.AsQueryable();
@@ -145,7 +146,7 @@ namespace Blog.Infrastructure.Repositories.Base
                 query = query.Include(include);
             }
 
-            return await query.FirstOrDefaultAsync(c => (object)c.Id ==id,cancellationToken);
+            return await query.FirstOrDefaultAsync(c =>c.Id ==id,cancellationToken);
         }
 
         #endregion
@@ -194,11 +195,11 @@ namespace Blog.Infrastructure.Repositories.Base
 
 
         #region Delete
-        public async Task Delete(object id, CancellationToken cancellationToken = default)
+        public async Task Delete(long id, CancellationToken cancellationToken = default)
         {
-            if (id is null)
+            if (id <=0)
             {
-                throw new NotFoundException($"the {nameof(id)} not found in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
+                throw new NotFoundException($"the {nameof(id)} not less than equal zero in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
             }
             var entity = await GetById(id, cancellationToken);
             if (entity is null)
@@ -227,11 +228,11 @@ namespace Blog.Infrastructure.Repositories.Base
             Entities.RemoveRange(entities);
         }
 
-        public async Task DeleteWithIncludes(object id, CancellationToken cancellationToken = default)
+        public async Task DeleteWithIncludes(long id, CancellationToken cancellationToken = default)
         {
-            if (id is null)
+            if (id <=0)
             {
-                throw new NotFoundException($"the {nameof(id)} not found in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
+                throw new NotFoundException($"the {nameof(id)} not less than equal zero in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");
             }
 
             var query = Entities.AsQueryable();
@@ -241,7 +242,7 @@ namespace Blog.Infrastructure.Repositories.Base
                 query = query.Include(include);
             }
 
-            var foundObject =await query.FirstOrDefaultAsync(c => (object) c.Id == id,cancellationToken);
+            var foundObject =await query.FirstOrDefaultAsync(c => c.Id == id,cancellationToken);
             if (foundObject is null)
             {
                 throw new NotFoundException($"the {nameof(foundObject)} not found in {GetType().Name}/{MethodBase.GetCurrentMethod().Name}");

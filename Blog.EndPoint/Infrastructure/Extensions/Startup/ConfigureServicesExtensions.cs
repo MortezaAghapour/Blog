@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text;
@@ -11,6 +12,8 @@ using Autofac;
 using Blog.Application.Dtos.AppSettings.Cors;
 using Blog.Application.Dtos.AppSettings.Identity;
 using Blog.Application.Dtos.AppSettings.Jwt;
+using Blog.Application.Dtos.AppSettings.Logging;
+using Blog.Application.Dtos.AppSettings.WebHosting;
 using Blog.Application.Dtos.Base;
 using Blog.Domain.Contracts.Repositories.Base;
 using Blog.Domain.Contracts.UnitOfWorks;
@@ -26,6 +29,7 @@ using Blog.Shared.Helpers;
 using Blog.Shared.Markers.Configurations;
 using Blog.Shared.Markers.DependencyInjectionLifeTimes;
 using Blog.Shared.Markers.Entities;
+using ElmahCore.Mvc;
 using FluentValidation.AspNetCore;
 using Hangfire;
 using Hangfire.SqlServer;
@@ -39,6 +43,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MediatR;
+using Microsoft.OpenApi.Models;
+
+using ElmahCore.Sql;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Blog.EndPoint.Infrastructure.Extensions.Startup
 {
@@ -48,11 +58,13 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
         {
 
             containerBuilder.RegisterGeneric(typeof(Repository<>)).As(typeof(IRepository<>)).InstancePerLifetimeScope();
-        
+            containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
+            containerBuilder.RegisterType<UrlHelperFactory>().As<IUrlHelperFactory>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<ActionContextAccessor>().As<IActionContextAccessor>().SingleInstance();
+            containerBuilder.RegisterType<HttpContextAccessor>().SingleInstance();
+            containerBuilder.RegisterType<HttpClient>().SingleInstance();
 
 
-
-          
             var domainAssembly = typeof(IEntity).Assembly;
             var applicationAssembly = typeof(EntityDto).Assembly;
             var infrastructureAssembly = typeof(BlogDbContext).Assembly;
@@ -86,6 +98,11 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
             //register http client
             services.AddHttpClient();
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddHttpContextAccessor();
+
+
+
             //add DbContext Configurations
             services.AddDbContextConfiguration(configuration);
             services.AddIdentityConfiguration(configuration);
@@ -93,7 +110,7 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
             //add Response Compression
             services.AddResponseCompressionConfigurations();
             //add mediatR
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatR(typeof(EntityDto).Assembly);
             //Add Cors
             services.AddCustomCors(configuration);
          
@@ -103,8 +120,21 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
                     options.RegisterValidatorsFromAssembly(typeof(EntityDto).Assembly);
                 });
             services.AddAuthorization();
+            services.AddElmah<SqlErrorLog>(options =>
+            {
+                var elmahConfiguration = configuration.GetSection(nameof(ElmahConfiguration)).Get<ElmahConfiguration>();
+                options.Path = elmahConfiguration.Path;
+                options.ConnectionString = configuration.GetConnectionString("DefaultConnection");
+                options.OnPermissionCheck = context => context.User.Identity.IsAuthenticated;
+            });
+
             services.AddHangFireConfig(configuration);
             services.AddJwtAuthentication(configuration);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
+            });
         }
         #region Configure Configs
 
@@ -136,6 +166,8 @@ namespace Blog.EndPoint.Infrastructure.Extensions.Startup
         {
             services.ConfigureStartupConfig<IdentityConfiguration>(configuration.GetSection(nameof(IdentityConfiguration)));
             services.ConfigureStartupConfig<JwtConfiguration>(configuration.GetSection(nameof(JwtConfiguration)));
+            services.ConfigureStartupConfig<ElmahConfiguration>(configuration.GetSection(nameof(ElmahConfiguration)));
+            services.ConfigureStartupConfig<HostConfiguration>(configuration.GetSection(nameof(HostConfiguration)));
             
         }
         #endregion

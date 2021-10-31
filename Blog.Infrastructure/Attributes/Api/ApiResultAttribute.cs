@@ -27,7 +27,7 @@ namespace Blog.Infrastructure.Attributes.Api
             //return BadRequest() method create an ObjectResult with StatusCode 400 in recent versions, So the following code has changed a bit.
             else if (context.Result is ObjectResult badRequestObjectResult && badRequestObjectResult.StatusCode == 400)
             {
-                string message = null;
+                string message = string.Empty;
 
                 switch (badRequestObjectResult.Value)
                 {
@@ -48,17 +48,17 @@ namespace Blog.Infrastructure.Attributes.Api
                         break;
                 }
 
-                var apiResult = new ResultDto(false, CustomStatusCodes.BadRequest, message: message);
+                var apiResult = new ResultDto(false, CustomStatusCodes.BadRequest,errors:message.Split(" | ").ToList(), message: message);
                 context.Result = new JsonResult(apiResult) { StatusCode = badRequestObjectResult.StatusCode };
             }
             else if (context.Result is ObjectResult notFoundObjectResult && notFoundObjectResult.StatusCode == 404)
             {
-                string message = null;
+                string message = string.Empty;
                 if (notFoundObjectResult.Value != null && !(notFoundObjectResult.Value is ProblemDetails))
                     message = notFoundObjectResult.Value.ToString();
 
                 //var apiResult = new ApiResult<object>(false, ApiResultStatusCode.NotFound, notFoundObjectResult.Value);
-                var apiResult = new ResultDto(false, CustomStatusCodes.NotFound, message: message);
+                var apiResult = new ResultDto(false, CustomStatusCodes.NotFound, errors:new List<string>{message}, message: message);
                 context.Result = new JsonResult(apiResult) { StatusCode = notFoundObjectResult.StatusCode };
             }
             else if (context.Result is ContentResult contentResult)
