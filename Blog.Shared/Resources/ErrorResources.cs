@@ -9,5 +9,6 @@
         public static string UnknownError => "خطایی نامعلوم وجود دارد";
         public static string NullArgumentError => "بعضی از پارامترهای ورودی خالی می باشد";
         public static string NullReference => "آبجکت مورد نظر نمونه سازی نشده است";
+        
     }
 }

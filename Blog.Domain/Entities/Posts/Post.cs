@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.Threading.Tasks;
 using Blog.Domain.Entities.Base;
 using Blog.Domain.Entities.Categories;
 using Newtonsoft.Json;

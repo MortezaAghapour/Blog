@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Blog.Application.Queries.Categories
 {
-    public class GetCategoriesQuery :IRequest<List<CategoryDto>>
+    public class GetSkillsQuery :IRequest<List<CategoryDto>>
     {
         
     }

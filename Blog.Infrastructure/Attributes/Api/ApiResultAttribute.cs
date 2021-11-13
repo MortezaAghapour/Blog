@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Blog.Application.Dtos.Commons;
 using Blog.Shared.Enums.Exceptions;
 using Microsoft.AspNetCore.Mvc;

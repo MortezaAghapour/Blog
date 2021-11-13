@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Blog.Application.Dtos.AppSettings.Jwt
+﻿namespace Blog.Application.Dtos.AppSettings.Jwt
 {
     public class JwtDto
     {

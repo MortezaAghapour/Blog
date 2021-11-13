@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Blog.Domain.Entities.Base;
 using Blog.Infrastructure.Contracts.Helpers;
 using Blog.Infrastructure.Extensions.Strings;
 using Blog.Shared.Consts.Auditing;

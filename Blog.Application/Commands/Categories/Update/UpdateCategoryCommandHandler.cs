@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Blog.Application.Dtos.Categories;
 using Blog.Domain.Contracts.Repositories.Categories;
 using Blog.Domain.Contracts.UnitOfWorks;
-using Blog.Domain.Entities.Categories;
 using Blog.Shared.Exceptions;
+using Blog.Shared.Resources;
+using FluentValidation;
 using Mapster;
 using MediatR;
 
@@ -33,7 +34,15 @@ namespace Blog.Application.Commands.Categories.Update
             var category = await _categoryRepository.GetById(request.Id, cancellationToken);
             if (category is null)
             {
-                throw new NotFoundException($"The Category Is Not Found In {GetType().Name} / {MethodBase.GetCurrentMethod().Name}");
+                throw new NotFoundException($"The Category Not Found In {GetType().Name} / {MethodBase.GetCurrentMethod().Name}");
+            }
+
+            var checkName = await _categoryRepository.Get(
+                expression: c => c.Name.Equals(request.Name) && !c.Id.Equals(request.Id),
+                cancellationToken: cancellationToken);
+            if (!(checkName is null))
+            {
+                throw new ValidationException(ValidationErrorResources.TheCategoryNameIsDuplicate);
             }
 
             // category = request.Adapt<Category>();//error occured => new instance error

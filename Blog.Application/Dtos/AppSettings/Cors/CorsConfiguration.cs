@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Blog.Shared.Markers.Configurations;
+﻿using Blog.Shared.Markers.Configurations;
 
 namespace Blog.Application.Dtos.AppSettings.Cors
 {

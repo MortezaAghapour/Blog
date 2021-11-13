@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Blog.Application.Commands.Categories.Create;
 using Blog.Application.Commands.Categories.Delete;
@@ -29,8 +25,8 @@ namespace Blog.EndPoint.Controllers
 
         #region Actions
 
-        [HttpPost("CreateCategory")]
-        [AllowAnonymous]
+        [HttpPost("[action]")]
+    
         public async Task<IActionResult> CreateCategory(CreateCategoryCommand command)
         {
             var result = await _mediator.Send(command);
@@ -38,15 +34,15 @@ namespace Blog.EndPoint.Controllers
         }
 
         [HttpGet("Categories")]
-        [AllowAnonymous]
+
         public async Task<IActionResult> GetCategories()
         {
-            var result =await _mediator.Send(new GetCategoriesQuery());
+            var result =await _mediator.Send(new GetSkillsQuery());
             return Ok(result);
         }
 
         [HttpPut("EditCategory")]
-        [AllowAnonymous]
+    
         public async Task<IActionResult> UpdateCategory(UpdateCategoryCommand command)
         {
             var result =await _mediator.Send(command);
@@ -54,7 +50,7 @@ namespace Blog.EndPoint.Controllers
         }
 
         [HttpDelete("RemoveCategory/{id:long}")]
-        [AllowAnonymous]
+    
         public async Task<IActionResult> DeleteCategory(long id)
         {
             var result = await _mediator.Send(new DeleteCategoryCommand{Id = id});

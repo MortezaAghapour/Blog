@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Blog.Application.Dtos.AppSettings.Cors;
 using Blog.Application.Dtos.AppSettings.Logging;
 using Blog.EndPoint.Infrastructure.Extensions.Middleware;
 using Blog.EndPoint.Infrastructure.Filters;

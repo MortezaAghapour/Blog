@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Blog.Application.FluentValidations.Categories.Delete
 {
-    public class DeleteCategoryValidator :AbstractValidator<DeleteCategoryCommand>
+    public class DeleteCategoryCommandValidator :AbstractValidator<DeleteCategoryCommand>
     {
-        public DeleteCategoryValidator()
+        public DeleteCategoryCommandValidator()
         {
             RuleFor(c => c.Id).NotEmpty().WithMessage(ValidationErrorResources.CategoryDeleteIdRequired)
                 .LessThanOrEqualTo(0).WithMessage(ValidationErrorResources.CategoryIdNotLessThanZero);

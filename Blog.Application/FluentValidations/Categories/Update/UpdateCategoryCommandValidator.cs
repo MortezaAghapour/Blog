@@ -7,14 +7,14 @@ using FluentValidation;
 
 namespace Blog.Application.FluentValidations.Categories.Update
 {
-    public class UpdateCategoryValidator : AbstractValidator<UpdateCategoryCommand>
+    public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
     {
         #region Fields
 
         private readonly ICategoryRepository _categoryRepository;
         #endregion
         #region Constructors
-        public UpdateCategoryValidator(ICategoryRepository categoryRepository)
+        public UpdateCategoryCommandValidator(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
 

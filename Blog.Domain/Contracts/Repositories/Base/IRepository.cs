@@ -5,7 +5,6 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Blog.Domain.Entities.Base;
-using Blog.Shared.Markers.Entities;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Blog.Domain.Contracts.Repositories.Base

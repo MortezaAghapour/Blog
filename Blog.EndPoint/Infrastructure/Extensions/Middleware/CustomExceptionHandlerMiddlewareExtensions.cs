@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Blog.EndPoint.Infrastructure.Middlewares;
+﻿using Blog.EndPoint.Infrastructure.Middlewares;
 using Microsoft.AspNetCore.Builder;
 
 namespace Blog.EndPoint.Infrastructure.Extensions.Middleware

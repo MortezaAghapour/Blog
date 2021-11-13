@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using Blog.Shared.Enums.DateTime;
 
 namespace Blog.Shared.Helpers
 {
     public class CommonHelper
     {
+        #region Properties
+        public static string BaseDirectory { get; set; }
+        #endregion
         #region Get TimeSpan By Period
 
         public static TimeSpan GetTimeSpanByPeriod(Period period, int val)
@@ -62,5 +63,17 @@ namespace Blog.Shared.Helpers
             }
         }
         #endregion
+
+        public static string MapPath(string path)
+        {
+            path = path.Replace("~/", "").TrimStart('/').Replace('/', '\\');
+            return Path.Combine(BaseDirectory ?? string.Empty, path);
+        }
+
+        public static string ImageName(string path)
+        {
+            var splitPic = path.Split('\\');
+            return !string.IsNullOrEmpty(path) ? splitPic[splitPic.Length - 1] : path;
+        }
     }
 }

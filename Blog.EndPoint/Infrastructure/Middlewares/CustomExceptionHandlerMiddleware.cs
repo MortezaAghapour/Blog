@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Blog.Application.Dtos.Commons;
 using Blog.Shared.Enums.Exceptions;

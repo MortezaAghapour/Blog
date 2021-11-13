@@ -10,7 +10,6 @@ using Blog.Domain.Entities.Base;
 using Blog.Infrastructure.ApplicationContexts;
 using Blog.Infrastructure.Extensions.DbContexts;
 using Blog.Shared.Exceptions;
-using Blog.Shared.Markers.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 

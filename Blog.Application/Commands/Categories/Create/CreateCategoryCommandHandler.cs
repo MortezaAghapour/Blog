@@ -4,6 +4,8 @@ using Blog.Application.Dtos.Categories;
 using Blog.Domain.Contracts.Repositories.Categories;
 using Blog.Domain.Contracts.UnitOfWorks;
 using Blog.Domain.Entities.Categories;
+using Blog.Shared.Exceptions;
+using Blog.Shared.Resources;
 using Mapster;
 using MediatR;
 
@@ -26,10 +28,14 @@ namespace Blog.Application.Commands.Categories.Create
         #region Methods
         public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            
-           
-             var category = request.Adapt<Category>();
-             category.ParentId = category.ParentId == 0 ? null : category.ParentId;
+
+            var category = await _categoryRepository.Get(expression: c => c.Name.Equals(request.Name), cancellationToken: cancellationToken);
+            if (category is null)
+            {
+                throw new AppException(message: ValidationErrorResources.TheCategoryNameIsDuplicate);
+            }
+            category = request.Adapt<Category>();
+            category.ParentId = category.ParentId == 0 ? null : category.ParentId;
             await _categoryRepository.Insert(category, cancellationToken);
             await _unitOfWork.SaveChangeAsync(cancellationToken);
             return category.Adapt<CategoryDto>();
