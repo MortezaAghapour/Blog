@@ -38,7 +38,7 @@ namespace Blog.Application.Commands.Skills.Update
             }
 
             var checkName = await _skillRepository.Get(
-                expression: c => c.Name.Equals(request.Name) && !c.Id.Equals(request.Id),
+                expression: c => c.Name.Trim().ToLower().Equals(request.Name.Trim().ToLower()) && !c.Id.Equals(request.Id),
                 cancellationToken: cancellationToken);
             if (!(checkName is null))
             {

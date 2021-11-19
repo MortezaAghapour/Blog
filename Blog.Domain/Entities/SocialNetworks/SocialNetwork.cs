@@ -15,7 +15,7 @@ namespace Blog.Domain.Entities.SocialNetworks
         public string Address { get; set; }
         public string Icon { get; set; }
         public string Color { get; set; }
-        public string Image { get; set; }
+
         #endregion
         #region Navigation Properties
         #endregion

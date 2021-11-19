@@ -38,7 +38,7 @@ namespace Blog.Application.Commands.Categories.Update
             }
 
             var checkName = await _categoryRepository.Get(
-                expression: c => c.Name.Equals(request.Name) && !c.Id.Equals(request.Id),
+                expression: c => c.Name.Trim().ToLower().Equals(request.Name.Trim().ToLower()) && !c.Id.Equals(request.Id),
                 cancellationToken: cancellationToken);
             if (!(checkName is null))
             {

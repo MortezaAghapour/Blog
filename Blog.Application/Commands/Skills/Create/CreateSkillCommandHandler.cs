@@ -31,7 +31,7 @@ namespace Blog.Application.Commands.Skills.Create
         #region Methods
         public async Task<SkillDto> Handle(CreateSkillCommand request, CancellationToken cancellationToken)
         {
-            var skill =await _skillRepository.Get(expression: c => c.Name.Equals(request.Name),
+            var skill =await _skillRepository.Get(expression: c => c.Name.Trim().ToLower().Equals(request.Name.Trim().ToLower()),
                 cancellationToken: cancellationToken);
             if (skill is null)
             {

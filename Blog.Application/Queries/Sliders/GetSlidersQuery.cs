@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Blog.Application.Queries.Sliders
 {
-    public class GetSliderQuery  :IRequest<List<SliderDto>>
+    public class GetSlidersQuery  :IRequest<List<SliderDto>>
     {
         
     }

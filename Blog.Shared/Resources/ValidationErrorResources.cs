@@ -1,4 +1,6 @@
-﻿namespace Blog.Shared.Resources
+﻿using Blog.Shared.Enums.Exceptions;
+
+namespace Blog.Shared.Resources
 {
     public class ValidationErrorResources
     {
@@ -34,5 +36,15 @@
         public static string SkillDescriptionMaxLength => "حداکثر کاراکتر توضیحات مهارت  1500 کاراکتر می باشد";
         public static string SliderDescriptionIsRequired => "وارد کردن توضیحات اسلایدر اجباری می باشد";
         public static string SliderImageIsRequired => "وارد کردن عکس اسلایدر اجباری می باشد";
+        public static string TheSocialIsExist => "شبکه اجتماعی وارد شده تکراری می باشد";
+        public static string SocialAddressIsRequired => "وارد کردن آدرس شبکه اجتماعی اجباری می باشد";
+        public static string SocialNetworkNameMaxLength => "حداکثر کاراکتر نام شبکه اجتماعی 500 کاراکتر می باشد";
+        public static string SocialNetworkNameIsRequired => "وارد کردن نام شبکه اجتماعی اجباری می باشد";
+        public static string SocialNetworkIconMaxLength => "حداکثر کاراکتر آیکن شبکه اجتماعی 500 کاراکتر می باشد";
+        public static string SocialNetworkColorMaxLength => "حداکثر کاراکتر رنگ شبکه اجتماعی 50 کاراکتر می باشد";
+        public static string SocialNetworkIdDeleteIdRequired => "برای حذف شبکه اجتماعی وارد کردن شناسه شبکه اجتماعی اجباری می باشد";
+        public static string SocialNetworkIdNotLessThanZero => "شناسه شبکه اجتماعی نمی تواند کوچکتر یا مساوی با صفر باشد";
+        public static string ThePostSlugIsDuplicate => "کلمه کلیدی پست وارد شده تکراری می باشد";
+        public static string PostImageIsRequired => "وارد کردن عکس پست اجباری می باشد";
     }
 }

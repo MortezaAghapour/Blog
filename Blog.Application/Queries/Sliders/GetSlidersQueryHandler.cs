@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Blog.Application.Queries.Sliders
 {
-    public class GetSliderQueryHandler : IRequestHandler<GetSliderQuery, List<SliderDto>>
+    public class GetSlidersQueryHandler : IRequestHandler<GetSlidersQuery, List<SliderDto>>
     {
         #region Fields
 
@@ -18,13 +18,13 @@ namespace Blog.Application.Queries.Sliders
 
         #endregion
         #region Costructors
-        public GetSliderQueryHandler(ISliderRepository sliderRepository)
+        public GetSlidersQueryHandler(ISliderRepository sliderRepository)
         {
             _sliderRepository = sliderRepository;
         }
         #endregion
         #region Methods
-        public async Task<List<SliderDto>> Handle(GetSliderQuery request, CancellationToken cancellationToken)
+        public async Task<List<SliderDto>> Handle(GetSlidersQuery request, CancellationToken cancellationToken)
         {
             var sliders = await _sliderRepository.GetAll(asNoTracking: true, cancellationToken: cancellationToken);
             return sliders.Adapt<List<SliderDto>>();

@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Blog.Shared\Blog.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\Posts\Delete\" />
+    <Folder Include="Commands\Posts\Update\" />
+  </ItemGroup>
+
 </Project>
