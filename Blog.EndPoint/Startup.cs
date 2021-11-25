@@ -13,7 +13,7 @@ namespace Blog.EndPoint
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _hostingEnvironment;
         public ILifetimeScope AutofacContainer { get; private set; }
-        public Startup(IConfiguration configuration, IWebHostEnvironment hostingEnvironment)
+        public Startup( IWebHostEnvironment hostingEnvironment)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)
