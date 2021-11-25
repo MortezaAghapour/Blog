@@ -9,7 +9,7 @@ namespace Blog.EndPoint.Controllers
     [Route("api/[controller]")]
     [ApiResult]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class BaseController : ControllerBase
+    public class BaseController :  ControllerBase
     {
 
     }

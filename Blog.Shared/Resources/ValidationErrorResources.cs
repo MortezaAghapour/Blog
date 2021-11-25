@@ -1,9 +1,12 @@
 ﻿using Blog.Shared.Enums.Exceptions;
+using System;
 
 namespace Blog.Shared.Resources
 {
     public class ValidationErrorResources
     {
+        
+
         public static string CategoryNameMaxLength => "حداکثر طول نام دسته بندی 250 کاراکتر می باشد";
 
         public static string CategoryNameIsRequired => "وارد کردن نام دسته بندی اجباری می باشد";
@@ -12,6 +15,9 @@ namespace Blog.Shared.Resources
 
         public static string CategoryDeleteIdRequired => "شناسه دسته بندی برای حذف نمی تواند خالی باشد";
         public static string CategoryIdNotLessThanZero => "شناسه دسته بندی نمی تواند کوچکتر یا مساوی صفر باشد";
+
+
+
         public static string UserNameIsRequired => "وارد کردن نام کاربری اجباری می باشد";
         public static string PasswordIsRequired => "وارد کردن رمز عبور اجباری می باشد";
         public static string UserNameIsExist => "نام کاربری وارد شده تکراری می باشد";
@@ -21,7 +27,6 @@ namespace Blog.Shared.Resources
 
         public static string TheSkillNameIsDuplicate => "نام مهارت وارد شده تکراری می باشد";
         public static string TheCategoryNameIsDuplicate => "نام دسته بندی وارد شده تکراری می باشد";
-
         public static string SkillNameMaxLength=>"حداکثر طول نام مهارت 500 کاراکتر می باشد";
 
         public static string SkillNameIsRequired => "وارد کردن نام مهارت اجباری می باشد";
@@ -46,5 +51,27 @@ namespace Blog.Shared.Resources
         public static string SocialNetworkIdNotLessThanZero => "شناسه شبکه اجتماعی نمی تواند کوچکتر یا مساوی با صفر باشد";
         public static string ThePostSlugIsDuplicate => "کلمه کلیدی پست وارد شده تکراری می باشد";
         public static string PostImageIsRequired => "وارد کردن عکس پست اجباری می باشد";
+
+        public static string PostTitleMaxLength => "حداکثر کاراکتر عنوان پست 500 کاراکتر می باشد";
+
+        public static string PostShortDescriptionMaxLength => "حداکثر کاراکتر توضیح مختصر پست 1500 کاراکتر می باشد";
+
+        public static string ThePostTitleIsRequired => "وارد کردن عنوان پست اجباری می باشد";
+        public static string ThePostShorDescriptionIsRequired => "وارد کردن توضیحات مختصر پست اجباری می باشد";
+
+        public static string ThePostFullDescriptionIsRequired => "وارد کردن توضیحات کامنل پست اجباری می باشد";
+
+        public static string ThePostAuthorIsRequired => "وارد کردن نویسنده پست اجباری می باشد";
+        public static string PostAuthorMaxLength => "حداکثر کاراکتر نویسنده پست 250 کاراکتر می باشد";
+
+        public static string PostSlugMaxLength => "حداکثر کاراکتر کلمه کلیدی پست 500 کاراکتر می باشد";
+        public static string ThePostSlugIsRequired => "وارد کردن کلمه کلیدی پست اجباری می باشد";
+
+        public static string PostDeleteIdRequired => "برای حذف پست وارد کردن شناسه پست اجباری می باشد";
+        public static string PostIdNotLessThanZero => "شناسه پست نمی تواند کوچکتر یا مساوی با صفر باشد";
+
+        public static string ThePostImageIsRequired => "وارد کردن عکس پست اجباری می باشد";
+
+     
     }
 }

@@ -29,13 +29,13 @@ namespace Blog.Application.Commands.Skills.Delete
         #endregion
         public async Task<bool> Handle(DeleteSkillCommand request, CancellationToken cancellationToken)
         {
-            var category = await _skillRepository.GetById(request.Id, cancellationToken);
-            if (category is null)
+            var skill = await _skillRepository.GetById(request.Id, cancellationToken);
+            if (skill is null)
             {
                 throw new NotFoundException($"The Skill Is Not Found In {GetType().Name} / {MethodBase.GetCurrentMethod().Name}");
             }
 
-            _skillRepository.Delete(category);
+            _skillRepository.Delete(skill);
             await _unitOfWork.SaveChangeAsync(cancellationToken);
             return true;
         }
