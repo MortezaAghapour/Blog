@@ -15,6 +15,7 @@ using FluentValidation;
 using MediatR;
 using Blog.EndPoint.Infrastructure.Extensions;
 using Blog.EndPoint.Infrastructure.Extensions.Validators;
+using Blog.Application.Queries.Sliders;
 
 namespace Blog.EndPoint.Controllers
 {
@@ -38,6 +39,12 @@ namespace Blog.EndPoint.Controllers
         #endregion
 
         #region Actions
+        [HttpGet("Sliders")]
+        public async Task<IActionResult> GetSliders()
+        {
+            var sliders =await  _mediator.Send(new GetSlidersQuery());
+            return Ok(sliders);
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateSlider(CreateSliderDto model, CancellationToken cancellationToken)
